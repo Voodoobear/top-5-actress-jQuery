@@ -10,14 +10,34 @@ $(function() {
         $mainMenuItems.children(".images").click(function() {
             
             let newIndex = $(this).parent().index(),
-            $item = $mainMenuItems.eq(newIndex),
-            $colorImage = $item.find(".color");
+            $item = $mainMenuItems.eq(newIndex);
 
-            $colorImage.animate({left:"0px"}, 350);
-            $item.animate({width: "420px"}, 350);
+            if(openedIndex === newIndex) {
+                animateItem($item, false, speed);
+                openedIndex = -1;
+            } else {
 
-            openedIndex = newIndex;
+                if (validIndex) {
+                    animateItem($mainMenuItems.eq(openedIndex), false, 350);
+                    openedIndex = newIndex;
+                    animateItem($item, true, 350);
+                }
+            }
         });
+    },
+
+    validIndex = function(indexToCheck) {
+        return (indexToCheck >= 0) && ( indexToCheck <= totalMainMenuItems);
+    },
+
+    animateItem = function($item, toOpen, speed) {
+
+            let $colorImage = $item.find(".color"),
+            itemParam = toOpen ? {width: "420px"} : {width: "140px"},
+            colorImagesParam = toOpen ? {left: "0px"} : {left: "140px"};
+            $colorImage.animate(colorImagesParam, speed);
+            $item.animate(itemParam, speed);
+
     };
     
     init();
